@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-postbox/0.6.0/knockout-postbox.min.js"></script>
+
+        <script src="ProfileModel.js"></script>
+        <script src="DataLoader.js"></script>
+        <script src="AddressComponent.js"></script>
+        <script src="ProfileComponent.js"></script>
+        <script src="SelectorComponent.js"></script>
+        <script src="PageComponent.js"></script>
+    </head>
+    <body>
+        <!-- Templates -->
+        <template id="page-template">
+            <div data-bind="component: {name: 'selector', params: $data}"></div>
+            <div data-bind="component: {name: 'profile', params: list()[0]}"></div>
+        </template>
+        <template id="selector-template">
+            <div data-bind="foreach: list">
+                <button data-bind="click: selectProfile, text: name"></button>
+            </div>
+            <div>
+                <input type="checkbox" data-bind="checked: onlyActive"/> Only Active Profiles
+            </div>
+        </template>
+        <template id="profile-template">
+            Name: <span data-bind="text: name"></span>
+            <div data-bind="component: {name: 'address', params: {street: address.street, no: address.no}}"></div>
+        </template>
+        <template id="address-template">
+            Address: <span data-bind="text: no"></span> <span data-bind="text: street"></span> street
+        </template>
+
+        <!-- Root Component -->
+        <div data-bind="component: {name: 'page', params: data}"></div>
+
+        <!-- KO bootstrap -->
+        <script>
+            ko.applyBindings({data: window.dataLoader});
+        </script>
+    </body>
+</html>
