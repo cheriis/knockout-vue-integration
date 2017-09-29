@@ -3,7 +3,7 @@ ko.bindingHandlers.kovuewrap = {
         $('#log').append('KOVue binding init<br>');
         viewModel.render(element);
     }
-}
+};
 
 window.KOVueWrapper = function(vName, koName) {
     ko.components.register(koName, {
@@ -13,16 +13,29 @@ window.KOVueWrapper = function(vName, koName) {
 
             var vInstance;
 
-            // use ko.utils.domNodeDisposal.addDisposeCallback(node, callback)
-            // for vm.$destroy()
+            var reactive = ko.mapping.toJS(model);
+            var subscription = model.showAddress.subscribe(function() {
+                if (!vInstance) {
+                    subscription.dispose();
+                    return;
+                }
+                vInstance.showAddress = model.showAddress();
+            });
 
             this.render = function(el) {
                 vInstance = new (Vue.component(vName))({
                     el: el,
                     // TODO Design dual interface (observables/reactive) model
-                    propsData: ko.mapping.toJS(model)
-                })
+                    propsData: reactive,
+                    mounted: function() {
+                        ko.utils.domNodeDisposal.addDisposeCallback(this.$el, function() {
+                            $('#log').append('KO component disposal: KOVue<br>');
+                            vInstance.$destroy();
+                            vInstance = null;
+                        });
+                    }
+                });
             }
         }
     });
-}
+};

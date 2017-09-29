@@ -25,7 +25,7 @@
         <!-- Templates -->
         <template id="page-template">
             <div data-bind="component: {name: 'selector', params: {data: data, showAddress: showAddress, selection: selection}}"></div>
-            <div data-bind="component: {name: 'profile', params: data.list()[selection()]}"></div>
+            <div data-bind="component: {name: 'profile', params: {profile: data.list()[selection()], showAddress: showAddress}}"></div>
         </template>
         <template id="selector-template">
             <div class="btn-group mb-3" data-bind="foreach: data.list">
@@ -46,9 +46,8 @@
         </template>
         <template id="profile-template">
             <div class="mt-3">
-                <b>Name: </b><span>{{name}}</span>
-                <!-- v-if="$parent.showAddress" -->
-                <address-comp street="{{address.street}}" no="{{address.no}}"></address-comp>
+                <b>Name: </b><span>{{profile.name}}</span>
+                <address-comp v-if="showAddress" :street="profile.address.street" :no="profile.address.no"></address-comp>
             </div>
         </template>
         <template id="address-template">
