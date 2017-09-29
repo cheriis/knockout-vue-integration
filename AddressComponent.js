@@ -5,3 +5,5 @@ ko.components.register('address', {
         return address;
     }
 });
+
+window.VueKOWrapper('address', 'address-comp', ['street', 'no']);

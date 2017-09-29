@@ -3,11 +3,15 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-postbox/0.6.0/knockout-postbox.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue.min.js"></script>
+
+        <script src="VueKOWrapper.js"></script>
+        <script src="KOVueWrapper.js"></script>
 
         <script src="ProfileModel.js"></script>
         <script src="DataLoader.js"></script>
         <script src="AddressComponent.js"></script>
-        <script src="ProfileComponent.js"></script>
+        <script src="VueProfileComponent.js"></script>
         <script src="SelectorComponent.js"></script>
         <script src="PageComponent.js"></script>
 
@@ -21,7 +25,7 @@
         <!-- Templates -->
         <template id="page-template">
             <div data-bind="component: {name: 'selector', params: {data: data, showAddress: showAddress, selection: selection}}"></div>
-            <div class="mt-3" data-bind="component: {name: 'profile', params: data.list()[selection()]}"></div>
+            <div data-bind="component: {name: 'profile', params: data.list()[selection()]}"></div>
         </template>
         <template id="selector-template">
             <div class="btn-group mb-3" data-bind="foreach: data.list">
@@ -41,10 +45,11 @@
             </div>
         </template>
         <template id="profile-template">
-            <b>Name: </b><span data-bind="text: name"></span>
-            <!-- ko if: $parent.showAddress -->
-            <div data-bind="component: {name: 'address', params: {street: address.street, no: address.no}}"></div>
-            <!-- /ko -->
+            <div class="mt-3">
+                <b>Name: </b><span>{{name}}</span>
+                <!-- v-if="$parent.showAddress" -->
+                <address-comp street="{{address.street}}" no="{{address.no}}"></address-comp>
+            </div>
         </template>
         <template id="address-template">
             <b>Address: </b><span data-bind="text: no"></span> <span data-bind="text: street"></span> street
