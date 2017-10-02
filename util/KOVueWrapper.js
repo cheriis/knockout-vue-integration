@@ -13,20 +13,16 @@ window.KOVueWrapper = function(vName, koName) {
 
             var vInstance;
 
-            var reactive = ko.mapping.toJS(model);
-            var subscription = model.showAddress.subscribe(function() {
-                if (!vInstance) {
-                    subscription.dispose();
-                    return;
-                }
-                vInstance.showAddress = model.showAddress();
-            });
-
             this.render = function(el) {
                 vInstance = new (Vue.component(vName))({
                     el: el,
                     // TODO Design dual interface (observables/reactive) model
-                    propsData: reactive,
+                    propsData: ko.mapping.toJS(model),
+                    created: function() {
+                        var vm = this;
+                        ReactiveModel.syncKOtoJS(model, vm.$props, '', vm);
+                    },
+                    // Vue component should be destroyed if it's KO Wrapper is
                     mounted: function() {
                         ko.utils.domNodeDisposal.addDisposeCallback(this.$el, function() {
                             $('#log').append('KO component disposal: KOVue<br>');

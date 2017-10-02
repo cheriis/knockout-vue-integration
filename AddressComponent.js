@@ -6,4 +6,4 @@ ko.components.register('address', {
     }
 });
 
-window.VueKOWrapper('address', 'address-comp', ['street', 'no']);
+window.VueKOWrapper('address', 'address-comp', ['capitalStreet', 'no']);
